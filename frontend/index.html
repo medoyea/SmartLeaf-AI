@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartLeaf AI — Plant Disease Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<!-- ══ BACKGROUND ════════════════════════════════════════════════════════════ -->
+<div class="bg-canvas">
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+  <div class="bg-grid"></div>
+</div>
+
+<!-- ══ NAV ════════════════════════════════════════════════════════════════════ -->
+<nav class="navbar">
+  <div class="nav-brand">
+    <div class="nav-logo">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 4C20 4 8 10 8 22C8 28.627 13.373 34 20 34C26.627 34 32 28.627 32 22C32 10 20 4 20 4Z" fill="url(#leaf-grad)" opacity="0.9"/>
+        <path d="M20 34L20 18M20 18L14 12M20 18L26 13" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="leaf-grad" x1="20" y1="4" x2="20" y2="34" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#6EE7B7"/>
+            <stop offset="1" stop-color="#059669"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <span class="nav-title">SmartLeaf<span class="nav-ai">AI</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="#scan" class="nav-link active" data-section="scan">Scan</a>
+    <a href="#results" class="nav-link" data-section="results">Results</a>
+    <a href="#compare" class="nav-link" data-section="compare">Models</a>
+    <a href="#dashboard" class="nav-link" data-section="dashboard">Dashboard</a>
+  </div>
+  <div class="nav-status">
+    <span class="status-dot" id="statusDot"></span>
+    <span class="status-label" id="statusLabel">Connecting...</span>
+  </div>
+</nav>
+
+<!-- ══ HERO ════════════════════════════════════════════════════════════════════ -->
+<section class="hero" id="scan">
+  <div class="hero-inner">
+    <div class="hero-tag">Powered by EfficientNet-B0 + SVM</div>
+    <h1 class="hero-title">
+      Detect Plant Disease<br/>
+      <span class="hero-accent">Intelligently.</span>
+    </h1>
+    <p class="hero-desc">Upload a leaf image for instant AI-powered disease detection, severity analysis, and personalized treatment recommendations.</p>
+  </div>
+</section>
+
+<!-- ══ SCAN SECTION ═══════════════════════════════════════════════════════════ -->
+<section class="scan-section" id="scanArea">
+  <div class="container">
+    <div class="scan-grid">
+
+      <!-- Upload Card -->
+      <div class="card upload-card">
+        <div class="card-header">
+          <div class="card-icon">📷</div>
+          <h2 class="card-title">Upload Leaf Image</h2>
+        </div>
+
+        <!-- Drop Zone -->
+        <div class="dropzone" id="dropzone">
+          <div class="dz-inner" id="dzDefault">
+            <div class="dz-icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="22" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 3"/>
+                <path d="M24 32V18M24 18L18 24M24 18L30 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 36H32" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+              </svg>
+            </div>
+            <p class="dz-main">Drag & drop leaf image here</p>
+            <p class="dz-sub">or click to browse · JPG, PNG, WEBP up to 16MB</p>
+          </div>
+          <div class="dz-preview" id="dzPreview" style="display:none">
+            <img id="previewImg" alt="Preview" />
+            <div class="dz-overlay">
+              <span class="dz-change">Click to change</span>
+            </div>
+          </div>
+          <input type="file" id="fileInput" accept="image/*" style="display:none" />
+        </div>
+
+        <!-- Camera Capture -->
+        <div class="camera-section" id="cameraSection">
+          <div class="camera-divider"><span>or use camera</span></div>
+          <button class="btn btn-outline btn-camera" id="cameraBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+              <circle cx="12" cy="13" r="4"/>
+            </svg>
+            Open Camera
+          </button>
+          <video id="cameraVideo" autoplay playsinline style="display:none"></video>
+          <canvas id="cameraCanvas" style="display:none"></canvas>
+          <button class="btn btn-primary" id="captureBtn" style="display:none">Capture Photo</button>
+        </div>
+
+        <!-- Analyze Button -->
+        <button class="btn btn-primary btn-analyze" id="analyzeBtn" disabled>
+          <span class="btn-text">Analyze Plant</span>
+          <div class="btn-spinner" style="display:none"></div>
+        </button>
+      </div>
+
+      <!-- Quick Tips Card -->
+      <div class="card tips-card">
+        <div class="card-header">
+          <div class="card-icon">💡</div>
+          <h2 class="card-title">Tips for Best Results</h2>
+        </div>
+        <div class="tips-list">
+          <div class="tip-item">
+            <div class="tip-num">01</div>
+            <div class="tip-content">
+              <strong>Clear Leaf Image</strong>
+              <p>Focus on a single leaf showing symptoms. Avoid blurry shots.</p>
+            </div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-num">02</div>
+            <div class="tip-content">
+              <strong>Good Lighting</strong>
+              <p>Natural daylight works best. Avoid strong shadows or flash glare.</p>
+            </div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-num">03</div>
+            <div class="tip-content">
+              <strong>Show Symptoms</strong>
+              <p>Capture the most affected part of the leaf for accurate diagnosis.</p>
+            </div>
+          </div>
+          <div class="tip-item">
+            <div class="tip-num">04</div>
+            <div class="tip-content">
+              <strong>Supported Plants</strong>
+              <p>Apple · Tomato · Corn · Grape · Potato and more via PlantVillage dataset.</p>
+            </div>
+          </div>
+        </div>
+        <!-- Supported Classes Mini List -->
+        <div class="supported-classes">
+          <p class="sc-title">Supported Diseases</p>
+          <div class="sc-tags" id="classTags"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ RESULTS SECTION ════════════════════════════════════════════════════════ -->
+<section class="results-section" id="results" style="display:none">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Analysis Results</h2>
+      <button class="btn btn-outline btn-sm" id="newScanBtn">← New Scan</button>
+    </div>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner" id="alertBanner" style="display:none">
+      <div class="alert-icon" id="alertIcon">⚠️</div>
+      <div class="alert-text">
+        <strong id="alertTitle"></strong>
+        <span id="alertDesc"></span>
+      </div>
+    </div>
+
+    <div class="results-grid">
+
+      <!-- Left Column -->
+      <div class="results-left">
+
+        <!-- Disease Card -->
+        <div class="card disease-card">
+          <div class="disease-header">
+            <div class="disease-badge" id="diseaseBadge"></div>
+            <div class="disease-title-wrap">
+              <h3 class="disease-name" id="diseaseName">—</h3>
+              <p class="disease-plant" id="diseasePlant">—</p>
+            </div>
+            <div class="severity-badge" id="severityBadge"></div>
+          </div>
+          <p class="disease-desc" id="diseaseDesc">—</p>
+
+          <!-- Inference Time -->
+          <div class="meta-row">
+            <span class="meta-item">⚡ <span id="inferenceTime">—</span>ms</span>
+            <span class="meta-item">🔬 Scan ID: <span id="scanId" class="mono">—</span></span>
+          </div>
+        </div>
+
+        <!-- Dual Model Predictions -->
+        <div class="card model-compare-card">
+          <div class="card-header">
+            <div class="card-icon">🤖</div>
+            <h3 class="card-title">Dual Model Predictions</h3>
+          </div>
+          <div class="model-predictions">
+            <!-- CNN -->
+            <div class="model-pred">
+              <div class="model-label">
+                <span class="model-tag model-cnn">CNN</span>
+                <span class="model-name">EfficientNet-B0 (End-to-End)</span>
+              </div>
+              <p class="pred-class" id="cnnClass">—</p>
+              <div class="confidence-bar-wrap">
+                <div class="confidence-bar">
+                  <div class="confidence-fill cnn-fill" id="cnnBar" style="width:0%"></div>
+                </div>
+                <span class="confidence-pct" id="cnnConf">0%</span>
+              </div>
+            </div>
+            <!-- SVM -->
+            <div class="model-pred">
+              <div class="model-label">
+                <span class="model-tag model-svm">SVM</span>
+                <span class="model-name">Feature Extractor + SVM (RBF)</span>
+              </div>
+              <p class="pred-class" id="svmClass">—</p>
+              <div class="confidence-bar-wrap">
+                <div class="confidence-bar">
+                  <div class="confidence-fill svm-fill" id="svmBar" style="width:0%"></div>
+                </div>
+                <span class="confidence-pct" id="svmConf">0%</span>
+              </div>
+            </div>
+            <!-- Agreement -->
+            <div class="model-agreement" id="modelAgreement"></div>
+          </div>
+
+          <!-- Top-K Predictions -->
+          <div class="topk-section" id="topkSection" style="display:none">
+            <p class="topk-title">Top Predictions (CNN)</p>
+            <div class="topk-list" id="topkList"></div>
+          </div>
+        </div>
+
+        <!-- Severity Card -->
+        <div class="card severity-card">
+          <div class="card-header">
+            <div class="card-icon">🔍</div>
+            <h3 class="card-title">Severity Estimation (OpenCV)</h3>
+          </div>
+          <div class="severity-content">
+            <div class="severity-meter-wrap">
+              <div class="severity-arc" id="severityArc">
+                <svg viewBox="0 0 200 110" class="arc-svg">
+                  <path class="arc-bg" d="M 20 100 A 80 80 0 0 1 180 100"/>
+                  <path class="arc-fill" id="arcFill" d="M 20 100 A 80 80 0 0 1 180 100" stroke-dasharray="0 251"/>
+                </svg>
+                <div class="arc-label">
+                  <span class="arc-score" id="arcScore">0</span>
+                  <span class="arc-unit">/100</span>
+                </div>
+              </div>
+              <div class="severity-level-badge" id="severityLevelBadge">—</div>
+            </div>
+            <div class="severity-stats">
+              <div class="sev-stat">
+                <span class="sev-stat-label">Affected Area</span>
+                <span class="sev-stat-val" id="affectedPct">—</span>
+              </div>
+              <div class="sev-stat">
+                <span class="sev-stat-label">Green Index</span>
+                <span class="sev-stat-val" id="greenIndex">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Treatment -->
+      <div class="results-right">
+
+        <div class="card treatment-card">
+          <div class="card-header">
+            <div class="card-icon">💊</div>
+            <h3 class="card-title">Treatment Recommendations</h3>
+          </div>
+
+          <div class="treatment-tabs">
+            <button class="tab-btn active" data-tab="treatment">Treatment</button>
+            <button class="tab-btn" data-tab="prevention">Prevention</button>
+            <button class="tab-btn" data-tab="care">Plant Care</button>
+          </div>
+
+          <div class="tab-content" id="tabTreatment">
+            <div class="treatment-section">
+              <h4 class="ts-title">🩺 Causes</h4>
+              <ul class="ts-list" id="causesList"></ul>
+            </div>
+            <div class="treatment-section">
+              <h4 class="ts-title">💉 Treatment Steps</h4>
+              <ul class="ts-list" id="treatmentList"></ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tabPrevention" style="display:none">
+            <div class="treatment-section">
+              <h4 class="ts-title">🛡️ Prevention</h4>
+              <ul class="ts-list" id="preventionList"></ul>
+            </div>
+          </div>
+
+          <div class="tab-content" id="tabCare" style="display:none">
+            <div class="treatment-section">
+              <h4 class="ts-title">💧 Watering Advice</h4>
+              <p class="ts-text" id="wateringText"></p>
+            </div>
+            <div class="treatment-section">
+              <h4 class="ts-title">🌱 Fertilizer</h4>
+              <p class="ts-text" id="fertilizerText"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Healthy Advice (conditional) -->
+        <div class="card healthy-card" id="healthyCard" style="display:none">
+          <div class="healthy-header">
+            <div class="healthy-icon">🌿</div>
+            <div>
+              <h3 class="healthy-title">Your plant is healthy!</h3>
+              <p class="healthy-sub">Here's how to keep it that way</p>
+            </div>
+          </div>
+          <div class="healthy-tips" id="healthyTips"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MODEL COMPARISON SECTION ══════════════════════════════════════════════ -->
+<section class="compare-section" id="compare">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Model Architecture Comparison</h2>
+      <p class="section-desc">EfficientNet-B0 evaluated as two distinct pipelines</p>
+    </div>
+
+    <div class="compare-grid">
+      <!-- CNN Card -->
+      <div class="card arch-card arch-cnn">
+        <div class="arch-badge">Approach 2</div>
+        <div class="arch-icon">🧠</div>
+        <h3 class="arch-title">End-to-End CNN</h3>
+        <p class="arch-sub">EfficientNet-B0 Fine-tuned</p>
+        <div class="arch-metrics" id="cnnMetrics">
+          <div class="am-row"><span>Accuracy</span><span class="am-val" id="cmpCnnAcc">—</span></div>
+          <div class="am-row"><span>Precision</span><span class="am-val" id="cmpCnnPrec">—</span></div>
+          <div class="am-row"><span>Recall</span><span class="am-val" id="cmpCnnRec">—</span></div>
+          <div class="am-row"><span>F1-Score</span><span class="am-val" id="cmpCnnF1">—</span></div>
+          <div class="am-row"><span>Train Time</span><span class="am-val" id="cmpCnnTime">—</span></div>
+        </div>
+        <div class="arch-flow">
+          <div class="flow-step">Input Image</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">EfficientNet-B0</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">Global Avg Pool</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">Dense + Softmax</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step flow-output">Prediction</div>
+        </div>
+      </div>
+
+      <!-- VS Divider -->
+      <div class="vs-divider">
+        <div class="vs-circle">VS</div>
+      </div>
+
+      <!-- SVM Card -->
+      <div class="card arch-card arch-svm">
+        <div class="arch-badge arch-badge-svm">Approach 1</div>
+        <div class="arch-icon">⚙️</div>
+        <h3 class="arch-title">Feature Extractor + SVM</h3>
+        <p class="arch-sub">EfficientNet-B0 + SVM (RBF)</p>
+        <div class="arch-metrics">
+          <div class="am-row"><span>Accuracy</span><span class="am-val" id="cmpSvmAcc">—</span></div>
+          <div class="am-row"><span>Precision</span><span class="am-val" id="cmpSvmPrec">—</span></div>
+          <div class="am-row"><span>Recall</span><span class="am-val" id="cmpSvmRec">—</span></div>
+          <div class="am-row"><span>F1-Score</span><span class="am-val" id="cmpSvmF1">—</span></div>
+          <div class="am-row"><span>Train Time</span><span class="am-val" id="cmpSvmTime">—</span></div>
+        </div>
+        <div class="arch-flow">
+          <div class="flow-step">Input Image</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">EfficientNet-B0 (Frozen)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">Feature Vector (1280-D)</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">SVM Classifier</div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step flow-output">Prediction</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Banner -->
+    <div class="compare-summary" id="compareSummary" style="display:none">
+      <div class="cs-icon">🏆</div>
+      <p class="cs-text" id="csSummaryText">—</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ DASHBOARD SECTION ══════════════════════════════════════════════════════ -->
+<section class="dashboard-section" id="dashboard">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Farmer Dashboard</h2>
+      <p class="section-desc">Session statistics and scan history</p>
+    </div>
+
+    <!-- Stat Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">🔬</div>
+        <div class="stat-value" id="statTotal">0</div>
+        <div class="stat-label">Total Scans</div>
+      </div>
+      <div class="stat-card stat-healthy">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value" id="statHealthy">0</div>
+        <div class="stat-label">Healthy Plants</div>
+      </div>
+      <div class="stat-card stat-diseased">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-value" id="statDiseased">0</div>
+        <div class="stat-label">Diseased</div>
+      </div>
+      <div class="stat-card stat-confidence">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value" id="statConfidence">—</div>
+        <div class="stat-label">Avg. Confidence</div>
+      </div>
+    </div>
+
+    <!-- Recent Scans Table -->
+    <div class="card history-card">
+      <div class="card-header">
+        <div class="card-icon">📋</div>
+        <h3 class="card-title">Recent Scans</h3>
+        <button class="btn btn-outline btn-sm ml-auto" id="refreshStatsBtn">↻ Refresh</button>
+      </div>
+      <div class="history-table-wrap">
+        <table class="history-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Plant</th>
+              <th>Disease</th>
+              <th>Status</th>
+              <th>Confidence</th>
+              <th>Severity</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <tr class="empty-row">
+              <td colspan="7">No scans yet. Upload a leaf image to get started.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="nav-title">SmartLeaf<span class="nav-ai">AI</span></span>
+      <p>Intelligent Plant Disease Detection System</p>
+    </div>
+    <div class="footer-tech">
+      <span class="tech-chip">EfficientNet-B0</span>
+      <span class="tech-chip">SVM (RBF)</span>
+      <span class="tech-chip">OpenCV</span>
+      <span class="tech-chip">Flask API</span>
+      <span class="tech-chip">PlantVillage Dataset</span>
+    </div>
+    <p class="footer-copy">© 2025 SmartLeaf AI · University Deep Learning Project</p>
+  </div>
+</footer>
+
+<!-- ══ LOADING OVERLAY ════════════════════════════════════════════════════════ -->
+<div class="loading-overlay" id="loadingOverlay" style="display:none">
+  <div class="loading-card">
+    <div class="loading-leaf">
+      <svg viewBox="0 0 60 60" fill="none">
+        <path d="M30 6C30 6 12 15 12 33C12 43 20 51 30 51C40 51 48 43 48 33C48 15 30 6 30 6Z" fill="url(#lg)"/>
+        <path d="M30 51V27M30 27L22 18M30 27L38 20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="lg" x1="30" y1="6" x2="30" y2="51">
+            <stop stop-color="#6EE7B7"/>
+            <stop offset="1" stop-color="#059669"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+    <p class="loading-text" id="loadingText">Analyzing leaf...</p>
+    <div class="loading-steps">
+      <div class="ls-step" id="ls1">CNN Inference</div>
+      <div class="ls-step" id="ls2">SVM Prediction</div>
+      <div class="ls-step" id="ls3">Severity Analysis</div>
+      <div class="ls-step" id="ls4">Treatment Lookup</div>
+    </div>
+  </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
