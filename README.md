@@ -21,7 +21,7 @@
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 <div align="center">
 
@@ -38,20 +38,18 @@
 
 ---
 
-## ✨ Features
+## Features
 
-- 🔬 **Dual AI Prediction** — EfficientNet-B0 CNN and SVM run simultaneously on every scan
-- 🎯 **98.67% Accuracy** — fine-tuned EfficientNet-B0 on 54,000+ PlantVillage images
-- 💊 **Treatment Recommendations** — causes, treatment steps, prevention, and plant care for all 38 disease classes
-- 📊 **Disease Severity Estimation** — OpenCV HSV color analysis estimates mild / moderate / severe
-- 📷 **Camera Support** — capture directly from device camera on mobile and desktop
-- 📈 **Model Comparison Dashboard** — side-by-side CNN vs SVM metrics with live charts
-- 🌱 **Smart Farmer Dashboard** — scan history, statistics, and disease distribution tracking
-- 📱 **Mobile-Friendly** — fully responsive design
+-  **Dual AI Prediction** — EfficientNet-B0 CNN and SVM run simultaneously on every scan
+-  **98.67% Accuracy** — fine-tuned EfficientNet-B0 on 54,000+ PlantVillage images
+-  **Treatment Recommendations** — causes, treatment steps, prevention, and plant care for all 38 disease classes
+-  **Disease Severity Estimation** — OpenCV HSV color analysis estimates mild / moderate / severe
+-  **Model Comparison Dashboard** — side-by-side CNN vs SVM metrics with live charts
+-  **Smart Farmer Dashboard** — scan history, statistics, and disease distribution tracking
 
 ---
 
-## 🤖 AI Approaches
+## AI Approaches
 
 | | Approach 1 | Approach 2 |
 |---|---|---|
@@ -66,7 +64,7 @@ Both models run on every prediction, and their outputs are shown side by side on
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 SmartLeaf-AI/
@@ -100,88 +98,44 @@ SmartLeaf-AI/
 
 ---
 
-## 📦 Dataset
+## Dataset
 
 **PlantVillage Dataset** — [Download from Kaggle](https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset)
 
-| Property | Value |
-|----------|-------|
-| Total images | 54,305 |
-| Classes | 38 (healthy + diseased) |
-| Plants covered | Apple, Tomato, Potato, Corn, Grape, Peach, Pepper, Cherry, and more |
-| Image type | RGB, 224×224px |
-| Format | JPG |
-
-After downloading, organize as:
-```
-dataset/
-└── plantvillage dataset/
-    └── color/
-        ├── Apple___Apple_scab/
-        ├── Apple___Black_rot/
-        ├── Tomato___Early_blight/
-        └── ... (38 folders total)
-```
-
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Python 3.10
 - NVIDIA GPU recommended (CPU works but CNN training takes ~6–10 hours)
 - [Miniconda](https://docs.anaconda.com/miniconda/) for GPU setup
 
-### 1. Clone the repository
-```bash
-git clone https://github.com/medoyea/SmartLeaf-AI.git
-cd SmartLeaf-AI
-```
-
-### 2. Create and activate environment
+### 1. Create and activate environment
 ```bash
 conda create -n smartleaf python=3.10 -y
 conda activate smartleaf
 ```
 
-### 3. Install CUDA (for GPU support)
-```bash
-conda install -c conda-forge cudatoolkit=11.2 cudnn=8.1 -y
-```
-
-### 4. Install Python dependencies
+### 2. Install Python dependencies
 ```bash
 pip install tensorflow==2.10.0 scikit-learn numpy opencv-python Pillow Flask flask-cors pandas matplotlib seaborn tqdm python-dotenv jupyter
 ```
 
-### 5. Download and prepare dataset
+### 3. Download and prepare dataset
 Download PlantVillage from Kaggle and place the `color/` folder at:
 ```
 dataset/plantvillage dataset/color/
 ```
 
-### 6. Train the models
+### 4. Train the models
 Open `notebooks/train.ipynb` in VS Code or Jupyter, set your `DATA_DIR` in Section 2, and run all cells.
 
-Expected training time:
-| Hardware | SVM | CNN |
-|----------|-----|-----|
-| GTX 1650 (4GB) | ~51 min | ~4 hours |
-| RTX 3080 | ~30 min | ~1.5 hours |
-| CPU only | ~1 hour | ~6–10 hours |
-
-### 7. Start the backend
+### 5. Start the backend
 ```bash
 cd backend
 python app.py
 ```
 
-### 8. Open the app
-Navigate to **http://localhost:5000** in your browser.
-
----
-
-## 📊 Results
+## Results
 
 ### Model Performance
 
@@ -197,11 +151,10 @@ Navigate to **http://localhost:5000** in your browser.
 - End-to-end CNN fine-tuning outperforms feature extraction + SVM by **~1%** in accuracy
 - SVM training is **~4.7x faster** than CNN while remaining highly competitive
 - Both models exceed the 90% accuracy target specified in the SRS
-- The dual-model approach provides prediction confidence comparison on every scan
 
 ---
 
-## 🔧 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
@@ -213,34 +166,3 @@ Navigate to **http://localhost:5000** in your browser.
 | **Data Processing** | NumPy, Pandas, Pillow |
 | **Visualization** | Matplotlib, Seaborn |
 | **Dataset** | PlantVillage (Kaggle) |
-
----
-
-## 🗺️ Future Enhancements
-
-- [ ] Mobile application (React Native / Flutter)
-- [ ] Arabic language support
-- [ ] Voice assistant integration
-- [ ] Edge deployment on Raspberry Pi devices
-- [ ] Real-time video stream disease detection
-- [ ] Expanded dataset with more plant species
-
----
-
-## 👥 Team
-
-> Built as a Deep Learning university project.
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
-
----
-
-<div align="center">
-
-Made with 🌿 and a lot of GPU time
-
-</div>
