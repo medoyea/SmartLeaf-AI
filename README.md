@@ -13,9 +13,6 @@
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.7-F7931E?style=flat&logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat)](LICENSE)
 
-**SmartLeaf AI** is an intelligent web-based agricultural assistant that detects plant diseases using Deep Learning and Computer Vision. Upload a leaf image and get instant disease predictions, treatment recommendations, severity estimation, and a live comparison between two AI approaches.
-
-[Live Demo](#-quick-start) · [Report Bug](issues) · [Dataset](#-dataset)
 
 </div>
 
