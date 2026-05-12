@@ -158,7 +158,6 @@ python app.py
 | **Backend** | Python, Flask, Flask-CORS |
 | **Deep Learning** | TensorFlow 2.10, Keras, EfficientNet-B0 |
 | **Machine Learning** | scikit-learn, SVM (RBF kernel) |
-| **Computer Vision** | OpenCV (severity estimation) |
 | **Data Processing** | NumPy, Pandas, Pillow |
 | **Visualization** | Matplotlib, Seaborn |
 | **Dataset** | PlantVillage (Kaggle) |
